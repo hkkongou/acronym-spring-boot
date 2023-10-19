@@ -19,7 +19,7 @@
       <div style="text-align:center">
         <span>2023/2024 Sem B FYP Project 56204199</span>
       </div>
-      <form action="#">
+      <form action="#" class="form1">
         <div class="form-row">
           <div class="input-data">
             <input type="text" required id="input_text">
@@ -42,7 +42,7 @@
 
         <div class="form-row">
           <div class="input-data">
-            <button @click="fetchData" class="button button1">Submit</button>
+            <button type="button" @click="fetchData" class="button button1" >Submit</button>
             <button type="button" @click="example" class="button button2">Example</button>
             <button type="button" @click="clear" class="button button3">Clear</button>
           </div>
@@ -386,6 +386,8 @@
       console_message: '',
       min: 3,
       max: 6,
+	  start_time: 0,
+	  stop_time: 0,
       rows: []
     },
     methods: {
@@ -410,8 +412,9 @@
       },
       fetchData: function () {
         if (document.getElementById("input_text").value) {
-          this.rows = [];
-          this.console_message = "loading! Please wait! Duration depends on sentence length and limits."
+          this.start_time = Date.now();
+		  this.rows = [];
+          this.console_message = "Loading! Please wait! Duration depends on sentence length and limits."
 
           var apiUrl = "http://localhost/spring/web/acronym?text=" + document.getElementById("input_text").value + "&max=" + 
           document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
@@ -429,7 +432,9 @@
                 this.console_message = "no results!"
                 this.rows = [];
               } else {
-                this.console_message = "hit! " + this.rows.length + " acronym found!";
+                
+				this.stop_time = Date.now();
+				this.console_message = "hit! " + this.rows.length + " acronym found in " + (this.stop_time - this.start_time)/1000 + " seconds!";
               }
             })
             .catch(error => {
