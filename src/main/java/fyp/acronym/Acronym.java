@@ -144,7 +144,7 @@ public class Acronym extends JFrame {
         if (longText.length()==0)
             return;
         for (String word : dictionaryWords) {
-            if (word.length() > acronym_min_length && word.length() < acronym_max_length) {
+            if (word.length() >= acronym_min_length && word.length() <= acronym_max_length) {
                 boolean containsAllCharacters = true;
                 for (char c : word.toCharArray()) {
                     if (longText.indexOf(c) == -1) {
@@ -173,7 +173,7 @@ public class Acronym extends JFrame {
 
     public static void fetchData() throws IOException {
         // Step 2: Create an ArrayList of dictionary words
-        URL url = new URL("https://raw.githubusercontent.com/dwyl/english-words/master/words.txt");
+        URL url = new URL("https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt");
         Scanner sc = new Scanner(url.openStream());
 
         // Step 2.5: Filter out roman numbers in database automatically
@@ -262,11 +262,12 @@ public class Acronym extends JFrame {
                 //3 point if last letter in a word
                 else if (i < word_char.length - 2 && word_char[i + 1] == ' ') {
                     score = score + 3;
-                } else score = score + 1;
-                //bonus, immediately following another capitalizd letter
-                if (i > 0 && Character.isUpperCase(word_char[i - 1])) {
-                    score = score + 2;
                 }
+                //else score = score + 1;
+                //bonus, immediately following another capitalizd letter
+//                if (i > 0 && Character.isUpperCase(word_char[i - 1])) {
+//                    score = score + 2;
+//                }
             }
         }
 
@@ -275,7 +276,7 @@ public class Acronym extends JFrame {
 
     public static Integer checkOnList(String word) {
         if (CommonWords.contains(word)) {
-            return 20;
+            return 5;
         }
         return 0;
     }
