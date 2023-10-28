@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Acronym extends JFrame {
     //dictionary word list
-    static ArrayList<String> dictionaryWords = new ArrayList<String>();
+    static ArrayList<String> dictionaryWords = new ArrayList<>();
     //common word list, words that are used in normal daily life, easier to memories
-    static ArrayList<String> CommonWords = new ArrayList<String>();
+    static ArrayList<String> CommonWords = new ArrayList<>();
     //result, found acronym
     static List<Record> records = new ArrayList<>();
 
