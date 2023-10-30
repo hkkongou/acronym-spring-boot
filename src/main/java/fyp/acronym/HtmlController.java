@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static fyp.acronym.Acronym.*;
+import static fyp.acronym.multithread_subsequence.generateSubsequences;
+import static fyp.acronym.multithread_subsequence.search;
 
 
 /**
@@ -125,5 +130,64 @@ public class HtmlController {
 
     }
 
+
+    // curl -i http://localhost/spring/web/acronym_sequence?text=City%20University%20Of%20Hong%20Kong
+    @RequestMapping(value = {"/acronym_sequence"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody               // ask the view resolver to treat the returned text as response body
+    public String acronym_sequence_website(
+            @RequestParam(name = "text", required = false) String text,
+            @RequestParam(name = "min", required = false) String min,
+            @RequestParam(name = "max", required = false) String max
+    ) {
+        records.clear();
+        List<String> subsequences  = new ArrayList<>();;
+        if (text != null) {
+            // Do something with the 'text' parameter
+            input = text;
+            try {
+                if (min != null) {
+                    acronym_min_length = Integer.parseInt(min);
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (max != null) {
+                    acronym_max_length = Integer.parseInt(max);
+                }
+            } catch (Exception e) {
+            }
+
+
+            subsequences = generateSubsequences(input.toLowerCase().replaceAll("[^A-Za-z]", ""));
+            for (String each: subsequences) {
+                if(search(each) == true){
+                    String ProcessedSentence = capitalizeSubstring(input.toLowerCase(), each);
+                    records.add(new Record(each, ProcessedSentence, Integer.sum(calculateScore(ProcessedSentence), checkOnList(each))));
+            }
+            }
+
+            if (records.isEmpty())
+                return "";
+
+            String jsonString = "{";
+
+
+            for (Record record : records) {
+
+                jsonString += "\"acronym\":\"" + record.getField1() + "\",";
+                jsonString += "\"sentence\":\"" + record.getField2() + "\",";
+                jsonString += "\"weight\":" + record.getIntegerValue();
+                jsonString += "},{";
+
+
+                //System.out.println(jsonString);
+            }
+            jsonString = jsonString.substring(0, jsonString.length() - 1);
+            jsonString = jsonString.substring(0, jsonString.length() - 1);
+            return "[" + jsonString + "]";
+        }
+        return "";
+
+    }
 
 }
