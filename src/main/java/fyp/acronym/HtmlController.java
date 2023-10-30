@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static fyp.acronym.Acronym.*;
@@ -166,8 +168,19 @@ public class HtmlController {
             }
             }
 
+
+
             if (records.isEmpty())
                 return "";
+
+            Collections.sort(records, new Comparator<Record>() {
+                @Override
+                public int compare(Record record1, Record record2) {
+                    // Compare based on the integer field , descending order
+                    //return Integer.compare(record1.getIntegerValue(), record2.getIntegerValue());
+                    return Integer.compare(record2.getIntegerValue(), record1.getIntegerValue());
+                }
+            });
 
             String jsonString = "{";
 
