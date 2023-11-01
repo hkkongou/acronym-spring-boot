@@ -128,7 +128,6 @@ public class multithread_subsequence {
 
         @Override
         protected List<String> compute() {
-            System.out.println(input);
             List<String> subsequences = new ArrayList<>();
             if (end - start <= input.length()/2) {
                 for (int mask = 1; mask < (1 << (end - start)); mask++) {
