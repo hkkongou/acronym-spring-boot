@@ -17,6 +17,7 @@ public class AcronymApplication {
 
 		fetchData();
 		construct_trie();
+		System.out.println("website at http://localhost/spring/web/index.html");
 	}
 
 
