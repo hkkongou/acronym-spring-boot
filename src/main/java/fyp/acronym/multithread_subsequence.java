@@ -129,7 +129,7 @@ public class multithread_subsequence {
         @Override
         protected List<String> compute() {
             List<String> subsequences = new ArrayList<>();
-            if (end - start <= acronym_max_length) {
+            if (end - start <= 30) {
                 for (int mask = 1; mask < (1 << (end - start)); mask++) {
                     StringBuilder combination = new StringBuilder();
                     int length = 0;

@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static fyp.acronym.Acronym.*;
 import static fyp.acronym.multithread_subsequence.generateSubsequences;
@@ -161,6 +158,9 @@ public class HtmlController {
 
 
             subsequences = generateSubsequences(input.toLowerCase().replaceAll("[^A-Za-z]", ""));
+            HashSet<String> set = new HashSet<>(subsequences);
+            subsequences = new ArrayList<>(set);
+
             for (String each: subsequences) {
                 if(search(each) == true){
                     String ProcessedSentence = capitalizeSubstring(input.toLowerCase(), each);
