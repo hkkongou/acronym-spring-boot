@@ -13,10 +13,10 @@ public class AcronymApplication {
 
 	public static void main(String[] args) throws IOException {
 		System.out.println("website at http://localhost/spring/web/index.html");
-		SpringApplication.run(AcronymApplication.class, args);
-
 		fetchData();
 		construct_trie();
+		SpringApplication.run(AcronymApplication.class, args);
+
 
 	}
 

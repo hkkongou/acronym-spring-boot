@@ -45,10 +45,13 @@
                 </div>
 
 
-                <label class="switch">
-                    <input type="checkbox" @click="mode_change">
-                    <span class="slider round"></span>
-                </label>
+                <div class="select">
+                    <select id="select">
+                        <option value="1">Brute Force</option>
+                        <option value="2">Trie + sequence</option>
+                        <option value="3">Trie + Aho</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-row">
@@ -59,7 +62,6 @@
 
         </form>
     </div>
-
 
 
     <div style="background-color: white;">
@@ -84,68 +86,50 @@
 
 </body>
 
-
 <style>
 
-.switch {
+select {
+  /* Reset Select */
+  appearance: none;
+  border: 1;
+  border-radius: 0px;
+  border-width: 2px;
+  border-color: black;
+  box-shadow: none;
+  /* Personalize */
+  flex: 1;
+  padding: 0 1em;
+  color: #000;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select wrapper */
+.select {
   position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+  display: flex;
+  width: 20em;
+  height: 53.6px;
+  border-radius: .25em;
+  overflow: hidden;
 }
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
+/* Arrow */
+.select::after {
+  content: '\25BC';
   position: absolute;
-  cursor: pointer;
   top: 0;
-  left: 0;
   right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  padding: 1em;
+  transition: .25s all ease;
+  pointer-events: none;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
+</style>
+<style>
   .button {
     background-color: #3498db;
     /* Green */
@@ -368,6 +352,8 @@ input:checked + .slider:before {
     }
   }
 
+
+
 </style>
 <style>
   table {
@@ -440,6 +426,8 @@ input:checked + .slider:before {
     background-position-y: bottom;
   }
 
+
+
 </style>
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
@@ -478,31 +466,24 @@ input:checked + .slider:before {
           return 0;
         })
       },
-	  mode_change: function(){
-	   if(this.mode==1){
-	   this.mode =2
-	   this.console_message = "Using algorithm 'sequence' mode. "
-	   this.rows = [];
-	   }
-	   else{
-	   this.mode=1
-	   this.console_message = "Using algorithm 'brute force' mode. "
-	   this.rows = [];
-	   }
-	  },
       fetchData: function () {
         if (document.getElementById("input_text").value) {
           this.start_time = Date.now();
 		  this.rows = [];
           this.console_message = "Loading! Please wait! Duration depends on sentence length and limits."
 
-if (this.mode==2){
+if (document.getElementById("select").value=='2'){
           var apiUrl = "http://localhost/spring/web/acronym_sequence?text=" + document.getElementById("input_text").value + "&max=" +
+          document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
+}
+else {if (document.getElementById("select").value=='3'){
+var apiUrl = "http://localhost/spring/web/acronym_aho?text=" + document.getElementById("input_text").value + "&max=" +
           document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
 }
 else{
           var apiUrl = "http://localhost/spring/web/acronym?text=" + document.getElementById("input_text").value + "&max=" +
           document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
+}
 }
           // Fetch data from the specified URL
 
@@ -560,6 +541,8 @@ else{
       //   });
     }
   });
+
+
 
 
 

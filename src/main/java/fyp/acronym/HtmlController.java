@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.*;
 
 import static fyp.acronym.Acronym.*;
+import static fyp.acronym.Trie_aho.multisearch;
+import static fyp.acronym.Trie_aho.words;
 import static fyp.acronym.multithread_subsequence.generateSubsequences;
 import static fyp.acronym.multithread_subsequence.search;
 
@@ -203,4 +205,75 @@ public class HtmlController {
 
     }
 
+
+
+
+    // curl -i http://localhost/spring/web/acronym_aho?text=City%20University%20Of%20Hong%20Kong
+    @RequestMapping(value = {"/acronym_aho"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody               // ask the view resolver to treat the returned text as response body
+    public String acronym_aho_website(
+            @RequestParam(name = "text", required = false) String text,
+            @RequestParam(name = "min", required = false) String min,
+            @RequestParam(name = "max", required = false) String max
+    ) {
+        records.clear();
+        if (text != null) {
+            // Do something with the 'text' parameter
+            input = text;
+            try {
+                if (min != null) {
+                    acronym_min_length = Integer.parseInt(min);
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (max != null) {
+                    acronym_max_length = Integer.parseInt(max);
+                }
+            } catch (Exception e) {
+            }
+
+
+            words.clear();
+            multisearch(input.toLowerCase().replaceAll("[^A-Za-z]", ""));
+
+
+            HashSet<String> set2 = new HashSet<>(words);
+            words = new ArrayList<>(set2);
+
+            for (String each: words) {
+                    String ProcessedSentence = capitalizeSubstring(input.toLowerCase(), each);
+                    records.add(new Record(each, ProcessedSentence, Integer.sum(calculateScore(ProcessedSentence), checkOnList(each))));
+            }
+
+
+            Collections.sort(records, new Comparator<Record>() {
+                @Override
+                public int compare(Record record1, Record record2) {
+                    // Compare based on the integer field , descending order
+                    //return Integer.compare(record1.getIntegerValue(), record2.getIntegerValue());
+                    return Integer.compare(record2.getIntegerValue(), record1.getIntegerValue());
+                }
+            });
+
+            String jsonString = "{";
+
+
+            for (Record record : records) {
+
+                jsonString += "\"acronym\":\"" + record.getField1() + "\",";
+                jsonString += "\"sentence\":\"" + record.getField2() + "\",";
+                jsonString += "\"weight\":" + record.getIntegerValue();
+                jsonString += "},{";
+
+
+                //System.out.println(jsonString);
+            }
+            jsonString = jsonString.substring(0, jsonString.length() - 1);
+            jsonString = jsonString.substring(0, jsonString.length() - 1);
+            return "[" + jsonString + "]";
+        }
+        return "";
+
+    }
 }
