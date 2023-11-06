@@ -47,9 +47,10 @@
 
                 <div class="select">
                     <select id="select">
-                        <option value="1">Brute Force</option>
-                        <option value="2">Trie + sequence</option>
-                        <option value="3">Trie + Aho</option>
+                        <option value="1">Trie + Aho</option>
+                        <option value="2">Brute Force</option>
+                        <option value="3">Trie + sequence</option>
+
                     </select>
                 </div>
             </div>
@@ -432,6 +433,12 @@ select::-ms-expand {
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script>
+function setSelectChoice() {
+document.getElementById("select").value = "2";
+}
+// Attach the function to the window.onload event
+window.onload = setSelectChoice;
+
   var fifthTable = new Vue({
     el: '#fifthTable',
     data: {
@@ -472,11 +479,11 @@ select::-ms-expand {
 		  this.rows = [];
           this.console_message = "Loading! Please wait! Duration depends on sentence length and limits."
 
-if (document.getElementById("select").value=='2'){
+if (document.getElementById("select").value=='3'){
           var apiUrl = "http://localhost/spring/web/acronym_sequence?text=" + document.getElementById("input_text").value + "&max=" +
           document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
 }
-else {if (document.getElementById("select").value=='3'){
+else {if (document.getElementById("select").value=='1'){
 var apiUrl = "http://localhost/spring/web/acronym_aho?text=" + document.getElementById("input_text").value + "&max=" +
           document.getElementById("max").value +"&min=" + document.getElementById("min").value ;
 }
